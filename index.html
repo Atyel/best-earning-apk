@@ -1,0 +1,2174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Best Earning App</title>
+
+  <script src='//libtl.com/sdk.js' data-zone='10662537' data-sdk='show_10662537'></script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Firebase SDKs -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+    import { 
+      getAuth, 
+      createUserWithEmailAndPassword, 
+      signInWithEmailAndPassword, 
+      signOut, 
+      onAuthStateChanged,
+      updateProfile,
+      sendPasswordResetEmail
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { 
+      getFirestore, 
+      doc, 
+      setDoc, 
+      getDoc, 
+      updateDoc, 
+      collection, 
+      addDoc, 
+      serverTimestamp, 
+      query, 
+      where, 
+      getDocs, 
+      orderBy, 
+      limit, 
+      deleteDoc,
+      onSnapshot,
+      writeBatch,
+      arrayUnion,
+      increment
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAFsisCCGyNLOl-iWuwupEJ16DUSgoHVCY",
+      authDomain: "earningapk-e573e.firebaseapp.com",
+      projectId: "earningapk-e573e",
+      storageBucket: "earningapk-e573e.firebasestorage.app",
+      messagingSenderId: "1048956135436",
+      appId: "1:1048956135436:web:a352542c8c6918d8162629",
+      measurementId: "G-5WQ61XCD1M"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    window.firebaseApp = app;
+    window.firebaseAuth = auth;
+    window.firebaseDb = db;
+    window.firebaseAnalytics = analytics;
+    window.firebaseModules = {
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      signOut,
+      onAuthStateChanged,
+      updateProfile,
+      sendPasswordResetEmail,
+      doc,
+      setDoc,
+      getDoc,
+      updateDoc,
+      collection,
+      addDoc,
+      serverTimestamp,
+      query,
+      where,
+      getDocs,
+      orderBy,
+      limit,
+      deleteDoc,
+      onSnapshot,
+      writeBatch,
+      arrayUnion,
+      increment
+    };
+  </script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body { 
+      font-family: 'Inter', sans-serif; 
+      background-color: #121212; 
+      color: #ffffff; 
+      max-width: 400px;
+      margin: 0 auto;
+      position: relative;
+      min-height: 100vh;
+    }
+    
+    .dark-bg { background-color: #121212; }
+    .card-bg { background-color: #1e1e1e; }
+    .border-accent { border-color: #ff8c00; }
+    .text-accent { color: #ff8c00; }
+    
+    .btn, .btn-accent, .btn-outline-accent { 
+      transition: all 0.2s ease-in-out; 
+      transform: scale(1); 
+      cursor: pointer;
+    }
+    .btn:active, .btn-accent:active, .btn-outline-accent:active { transform: scale(0.95); }
+    
+    .btn-accent { 
+      background-color: #ff8c00; 
+      color: #121212; 
+      font-weight: bold; 
+    }
+    .btn-accent:hover { background-color: #e67e00; }
+    
+    .btn-outline-accent { 
+      border: 1px solid #ff8c00; 
+      color: #ff8c00; 
+    }
+    .btn-outline-accent:hover { 
+      background-color: #ff8c00; 
+      color: #121212; 
+    }
+    
+    .input-field { 
+      background-color: #2c2c2c; 
+      border: 1px solid #444; 
+      color: white; 
+    }
+    .input-field:focus { 
+      outline: none; 
+      border-color: #ff8c00; 
+    }
+    
+    .main-page { display: none; }
+    .main-page.active { display: flex; animation: fadeIn 0.5s ease-in-out; }
+    .sub-page { display: none; }
+    .sub-page.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+    
+    .bottom-nav a.active { color: #ff8c00; }
+    
+    .notification-dot {
+      position: absolute; top: -2px; right: -2px; width: 10px; height: 10px;
+      background-color: #ef4444; border-radius: 50%; border: 2px solid #121212; display: none;
+    }
+    
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    
+    .ip-warning { 
+      background-color: #dc2626; 
+      color: white; 
+      padding: 10px; 
+      border-radius: 8px; 
+      margin-bottom: 15px; 
+      text-align: center; 
+      display: none; 
+    }
+    
+    .user-blocked { 
+      background-color: #7f1d1d; 
+      color: white; 
+      padding: 10px; 
+      border-radius: 8px; 
+      margin: 10px; 
+      text-align: center; 
+      display: none; 
+    }
+
+    /* New Popup Styles - Exact Match Screenshot */
+    .task-popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 20px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .task-popup.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .popup-content {
+      background-color: #1a1a1a;
+      border-radius: 20px;
+      padding: 25px;
+      width: 100%;
+      max-width: 320px;
+      border: 1px solid #333;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .popup-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .popup-header h2 {
+      color: #ff8c00;
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .popup-header .coins {
+      color: #fff;
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    .popup-timer {
+      background-color: #2a2a2a;
+      border-radius: 50px;
+      padding: 15px;
+      margin: 20px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .popup-timer .timer-icon {
+      color: #ff8c00;
+      font-size: 24px;
+    }
+
+    .popup-timer .timer-number {
+      color: #ff8c00;
+      font-size: 48px;
+      font-weight: bold;
+      line-height: 1;
+    }
+
+    .popup-timer .timer-text {
+      color: #fff;
+      font-size: 16px;
+    }
+
+    .popup-message {
+      text-align: center;
+      color: #999;
+      font-size: 14px;
+      margin-top: 15px;
+    }
+
+    .warning-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: linear-gradient(135deg, #2a1a1a, #1a1a1a);
+      border-radius: 20px;
+      padding: 30px;
+      width: 90%;
+      max-width: 300px;
+      z-index: 10000;
+      border: 2px solid #ff4444;
+      box-shadow: 0 0 30px rgba(255, 68, 68, 0.3);
+      text-align: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .warning-popup.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .warning-popup .warning-icon {
+      font-size: 50px;
+      margin-bottom: 15px;
+    }
+
+    .warning-popup h3 {
+      color: #ff4444;
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .warning-popup p {
+      color: #fff;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .warning-popup .emoji {
+      font-size: 40px;
+      margin-top: 10px;
+    }
+
+    /* Coin to Taka Display */
+    .balance-container {
+      background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+      border-radius: 15px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+
+    .coin-to-taka {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      background-color: #ff8c00;
+      border-radius: 10px;
+      color: #000;
+      font-weight: bold;
+    }
+
+    .coin-to-taka .label {
+      font-size: 14px;
+    }
+
+    .coin-to-taka .value {
+      font-size: 18px;
+      background: #fff;
+      padding: 5px 15px;
+      border-radius: 20px;
+    }
+
+    .admin-tab-active {
+      background-color: #ff8c00 !important;
+      color: black !important;
+    }
+
+    .withdrawal-item {
+      transition: all 0.3s ease;
+    }
+    .withdrawal-item:hover {
+      background-color: #2a2a2a;
+    }
+
+    /* নতুন স্টাইল - টাস্ক রিকভারি পপআপ */
+    #task-recovery-popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      padding: 20px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    #task-recovery-popup.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .recovery-content {
+      background-color: #1a1a1a;
+      border-radius: 20px;
+      padding: 30px;
+      width: 100%;
+      max-width: 320px;
+      border: 2px solid #ff8c00;
+      text-align: center;
+    }
+    
+    .recovery-icon {
+      font-size: 50px;
+      margin-bottom: 15px;
+    }
+    
+    .recovery-content h3 {
+      color: #ff8c00;
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    
+    .recovery-content p {
+      color: #999;
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+    
+    .recovery-buttons {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .recovery-btn-yes {
+      flex: 1;
+      background-color: #ff8c00;
+      color: black;
+      font-weight: bold;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .recovery-btn-no {
+      flex: 1;
+      background-color: #333;
+      color: white;
+      font-weight: bold;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .recovery-btn-yes:active, .recovery-btn-no:active {
+      transform: scale(0.95);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Loader -->
+  <div id="loader" class="hidden fixed inset-0 dark-bg bg-opacity-75 flex items-center justify-center z-[100]">
+    <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-accent"></div>
+  </div>
+
+  <!-- Blocked User Message -->
+  <div id="user-blocked-message" class="user-blocked">
+    ⛔ আপনার অ্যাকাউন্ট ব্লক করা হয়েছে। বিস্তারিত জানতে সাপোর্টে যোগাযোগ করুন।
+  </div>
+
+  <!-- IP Warning -->
+  <div id="ip-warning" class="ip-warning">
+    ⚠️ Warning: Multiple device detected! You can only use one device per account.
+  </div>
+
+  <!-- New 3-Second Popup (Screenshot Style) -->
+  <div id="task-start-popup" class="task-popup">
+    <div class="popup-content">
+      <div class="popup-header">
+        <h2>Best Earning App</h2>
+        <div class="coins"><span id="popup-coins">50</span> Coins</div>
+      </div>
+      
+      <div class="popup-timer">
+        <span class="timer-icon">⏱️</span>
+        <span class="timer-number" id="popup-timer-display">5</span>
+        <span class="timer-text">সেকেন্ড</span>
+      </div>
+      
+      <div class="popup-message">
+        কাজটি সম্পন্ন করতে অপেক্ষা করুন। ব্রাউজার বা অ্যাপ বন্ধ করবেন না।
+      </div>
+    </div>
+  </div>
+
+  <!-- Warning Popup for Incomplete Task -->
+  <div id="incomplete-task-popup" class="warning-popup">
+    <div class="warning-icon">❌</div>
+    <h3>টাস্ক সম্পন্ন হয়নি!</h3>
+    <p>আপনার টাস্ক টি সম্পন্ন হয় নি। তাই আপনি এই টাস্ক এর জন্য কোনো টাকা পাবেন না।</p>
+    <div class="emoji">😞</div>
+  </div>
+
+  <!-- Task Recovery Popup - নতুন যোগ করা হয়েছে -->
+  <div id="task-recovery-popup">
+    <div class="recovery-content">
+      <div class="recovery-icon">⚠️</div>
+      <h3>অসম্পূর্ণ টাস্ক</h3>
+      <p>আপনার একটি টাস্ক অসম্পূর্ণ আছে। আপনি কি এটি আবার শুরু করতে চান?</p>
+      <div class="recovery-buttons">
+        <button class="recovery-btn-yes" onclick="recoverIncompleteTask()">হ্যাঁ</button>
+        <button class="recovery-btn-no" onclick="discardIncompleteTask()">না</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timer Modal (Hidden by default - shows during actual task) -->
+  <div id="timer-modal" class="hidden fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-6">
+    <div class="bg-gray-800 rounded-lg p-8 w-full max-w-sm text-center">
+      <h3 class="text-xl font-bold mb-4 text-accent">Please Wait</h3>
+      <div class="text-4xl font-bold mb-4" id="countdown-display">0</div>
+      <p class="text-gray-400 text-sm">কাজটি সম্পন্ন করতে অপেক্ষা করুন। ব্রাউজার বা অ্যাপ বন্ধ করবেন না।</p>
+    </div>
+  </div>
+
+  <!-- Admin Panel -->
+  <div id="admin-panel" class="hidden fixed inset-0 bg-black bg-opacity-95 z-[200] overflow-y-auto p-4">
+    <div class="flex justify-between items-center mb-6 sticky top-0 bg-black bg-opacity-95 py-2">
+      <h2 class="text-2xl font-bold text-accent">Admin Panel</h2>
+      <button onclick="toggleAdminPanel()" class="text-white text-2xl hover:text-accent">&times;</button>
+    </div>
+    
+    <div class="flex space-x-2 mb-6 sticky top-12 bg-black bg-opacity-95 py-2">
+      <button onclick="switchAdminTab('users')" id="tab-users" class="flex-1 py-2 px-3 rounded-lg bg-gray-800 text-white text-sm font-semibold admin-tab-active">Users</button>
+      <button onclick="switchAdminTab('withdrawals')" id="tab-withdrawals" class="flex-1 py-2 px-3 rounded-lg bg-gray-800 text-white text-sm font-semibold">Withdrawals</button>
+      <button onclick="switchAdminTab('settings')" id="tab-settings" class="flex-1 py-2 px-3 rounded-lg bg-gray-800 text-white text-sm font-semibold">Settings</button>
+      <button onclick="switchAdminTab('stats')" id="tab-stats" class="flex-1 py-2 px-3 rounded-lg bg-gray-800 text-white text-sm font-semibold">Stats</button>
+    </div>
+
+    <div id="admin-users-tab" class="space-y-4">
+      <div class="card-bg p-4 rounded-lg">
+        <div class="flex space-x-2 mb-3">
+          <input type="text" id="search-user" placeholder="Search by email or name..." class="flex-1 p-2 rounded-lg input-field text-sm">
+          <button onclick="searchUsers()" class="bg-accent text-black px-4 py-2 rounded-lg text-sm font-semibold">Search</button>
+        </div>
+        <div class="flex space-x-2 mb-3">
+          <button onclick="loadAllUsers()" class="flex-1 py-1 px-2 rounded bg-blue-600 text-white text-sm">All Users</button>
+          <button onclick="loadBlockedUsers()" class="flex-1 py-1 px-2 rounded bg-red-600 text-white text-sm">Blocked</button>
+        </div>
+        <div id="users-list" class="space-y-3 max-h-96 overflow-y-auto"></div>
+      </div>
+    </div>
+
+    <div id="admin-withdrawals-tab" class="hidden space-y-4">
+      <div class="card-bg p-4 rounded-lg">
+        <div class="flex space-x-2 mb-3">
+          <button onclick="filterWithdrawals('pending')" class="flex-1 py-2 px-3 rounded bg-yellow-600 text-white text-sm font-semibold">Pending</button>
+          <button onclick="filterWithdrawals('approved')" class="flex-1 py-2 px-3 rounded bg-green-600 text-white text-sm font-semibold">Approved</button>
+          <button onclick="filterWithdrawals('rejected')" class="flex-1 py-2 px-3 rounded bg-red-600 text-white text-sm font-semibold">Rejected</button>
+          <button onclick="filterWithdrawals('all')" class="flex-1 py-2 px-3 rounded bg-gray-600 text-white text-sm font-semibold">All</button>
+        </div>
+        <div id="withdrawal-requests-list" class="space-y-3 max-h-96 overflow-y-auto"></div>
+      </div>
+    </div>
+
+    <div id="admin-settings-tab" class="hidden space-y-4">
+      <div class="card-bg p-4 rounded-lg">
+        <h3 class="font-bold mb-4 text-accent">App Settings</h3>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm mb-1">Minimum Withdrawal (Coins)</label>
+            <input type="number" id="min-withdrawal-setting" class="w-full p-2 rounded-lg input-field" value="5000">
+          </div>
+          <div>
+            <label class="block text-sm mb-1">Daily Ad Limit</label>
+            <input type="number" id="daily-ad-limit-setting" class="w-full p-2 rounded-lg input-field" value="15">
+          </div>
+          <div>
+            <label class="block text-sm mb-1">Referral Bonus</label>
+            <input type="number" id="referral-bonus-setting" class="w-full p-2 rounded-lg input-field" value="50">
+          </div>
+          <div>
+            <label class="block text-sm mb-1">Coin to Taka Rate (1 Coin = ? Taka)</label>
+            <input type="number" id="coin-rate-setting" class="w-full p-2 rounded-lg input-field" value="0.01" step="0.001">
+          </div>
+          <button onclick="updateSettings()" class="w-full btn-accent p-2 rounded-lg font-semibold">Update Settings</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="admin-stats-tab" class="hidden space-y-4">
+      <div class="card-bg p-4 rounded-lg">
+        <h3 class="font-bold mb-4 text-accent">App Statistics</h3>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="bg-gray-800 p-4 rounded-lg text-center">
+            <p class="text-3xl font-bold text-accent" id="total-users">0</p>
+            <p class="text-xs text-gray-400">Total Users</p>
+          </div>
+          <div class="bg-gray-800 p-4 rounded-lg text-center">
+            <p class="text-3xl font-bold text-accent" id="total-withdrawals">0</p>
+            <p class="text-xs text-gray-400">Withdrawals</p>
+          </div>
+          <div class="bg-gray-800 p-4 rounded-lg text-center">
+            <p class="text-3xl font-bold text-accent" id="pending-withdrawals">0</p>
+            <p class="text-xs text-gray-400">Pending</p>
+          </div>
+          <div class="bg-gray-800 p-4 rounded-lg text-center">
+            <p class="text-3xl font-bold text-accent" id="total-coins-paid">0</p>
+            <p class="text-xs text-gray-400">Coins Paid</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Auth Section -->
+  <div id="auth-section" class="min-h-screen p-6 flex-col justify-center main-page active">
+    <h1 class="text-3xl font-bold text-center mb-2 text-accent">Best Earning App</h1>
+    <p class="text-center text-gray-400 mb-8">Login or Signup to continue</p>
+
+    <div id="auth-container">
+      <div id="login-view">
+        <input id="login-email" type="email" placeholder="Email" class="w-full p-3 rounded-lg input-field mb-4">
+        <input id="login-password" type="password" placeholder="Password" class="w-full p-3 rounded-lg input-field mb-4">
+        <button id="login-btn" class="w-full p-3 rounded-lg btn-accent mb-4">Login</button>
+        <p class="text-center text-gray-400">Don't have an account?
+          <a href="#" id="show-signup" class="font-semibold text-accent">Sign Up</a>
+        </p>
+        <p class="text-center text-gray-400 mt-2">
+          <a href="#" id="forgot-password" class="text-sm text-accent">Forgot Password?</a>
+        </p>
+      </div>
+
+      <div id="signup-view" class="hidden">
+        <input id="signup-name" type="text" placeholder="Full Name" class="w-full p-3 rounded-lg input-field mb-4">
+        <input id="signup-email" type="email" placeholder="Email" class="w-full p-3 rounded-lg input-field mb-4">
+        <input id="signup-password" type="password" placeholder="Password (min 6 characters)" class="w-full p-3 rounded-lg input-field mb-4">
+        <input id="referral-code-input" type="text" placeholder="Referral Code (Optional)" class="w-full p-3 rounded-lg input-field mb-4">
+        <button id="signup-btn" class="w-full p-3 rounded-lg btn-accent mb-4">Sign Up</button>
+        <p class="text-center text-gray-400">Already have an account?
+          <a href="#" id="show-login" class="font-semibold text-accent">Login</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main App Container -->
+  <div id="app-container" class="min-h-screen flex-col main-page">
+    <header class="flex items-center justify-between p-4 sticky top-0 bg-opacity-80 backdrop-blur-md z-10 dark-bg">
+      <h1 class="text-xl font-bold">Best Earning App</h1>
+      <div class="flex items-center space-x-4">
+        <div id="notification-bell" class="relative cursor-pointer">
+          <i data-lucide="bell" class="w-6 h-6"></i>
+          <div id="notification-dot" class="notification-dot"></div>
+        </div>
+        <i data-lucide="user" class="w-6 h-6 cursor-pointer" onclick="navigateTo('profile-page')"></i>
+      </div>
+    </header>
+
+    <main class="flex-grow">
+      <!-- Home Page -->
+      <div id="home-page" class="p-4 space-y-6 sub-page active">
+        <div class="balance-container">
+          <div class="card-bg p-4 rounded-lg flex items-center justify-between border-l-4 border-accent mb-3">
+            <div>
+              <p class="text-gray-400 text-sm">Your Balance</p>
+              <p class="text-3xl font-bold text-white"><span id="coin-balance">0</span> Coins</p>
+            </div>
+            <button onclick="navigateTo('wallet-page')" class="bg-white text-black font-semibold px-6 py-2 rounded-lg">Withdraw</button>
+          </div>
+          
+          <!-- Coin to Taka Display -->
+          <div class="coin-to-taka">
+            <span class="label">=</span>
+            <span class="value"><span id="taka-equivalent">0.00</span> টাকা</span>
+          </div>
+        </div>
+
+        <section>
+          <div class="flex justify-between items-center">
+            <div>
+              <h2 class="text-lg font-semibold">Daily Tasks</h2>
+              <p class="text-sm text-gray-400 mb-4">কয়েন আয় করতে নিচের টাস্কগুলো সম্পন্ন করুন।</p>
+            </div>
+            <p class="text-sm text-gray-400">Tasks Left: <span id="ads-left-count">15</span></p>
+          </div>
+
+          <div class="space-y-3">
+            <div class="bg-orange-500 p-3 rounded-lg flex items-center justify-between text-black">
+              <div class="flex items-center space-x-3">
+                <span class="text-3xl">🤩</span>
+                <div>
+                  <h3 class="font-bold">Watch Video Ad</h3>
+                  <p class="text-xs font-medium">Instant Reward</p>
+                </div>
+              </div>
+              <button class="bg-white text-orange-500 font-bold px-6 py-2 rounded-lg text-sm btn" onclick="handleTaskClick('video', 0, 50)">Claim</button>
+            </div>
+
+            <div class="card-bg p-3 rounded-lg flex items-center justify-between">
+              <div class="flex items-center space-x-3">
+                <span class="text-3xl">🌐</span>
+                <div>
+                  <h3 class="font-semibold">Website Visit 1</h3>
+                  <p class="text-xs text-gray-400">Wait 20 Seconds</p>
+                </div>
+              </div>
+              <button class="bg-blue-600 text-white font-bold px-6 py-2 rounded-lg text-sm btn" onclick="handleTaskClick('website', 20, 50, 'https://bestearningapk11.blogspot.com')">Visit</button>
+            </div>
+
+            <div class="card-bg p-3 rounded-lg flex items-center justify-between">
+              <div class="flex items-center space-x-3">
+                <span class="text-3xl">🌐</span>
+                <div>
+                  <h3 class="font-semibold">Website Visit 2</h3>
+                  <p class="text-xs text-gray-400">Wait 20 Seconds</p>
+                </div>
+              </div>
+              <button class="bg-blue-600 text-white font-bold px-6 py-2 rounded-lg text-sm btn" onclick="handleTaskClick('website', 20, 50, 'https://bestearningapk1.blogspot.com')">Visit</button>
+            </div>
+
+            <div class="card-bg p-3 rounded-lg flex items-center justify-between">
+              <div class="flex items-center space-x-3">
+                <span class="text-3xl">🌐</span>
+                <div>
+                  <h3 class="font-semibold">Website Visit 3</h3>
+                  <p class="text-xs text-gray-400">Wait 20 Seconds</p>
+                </div>
+              </div>
+              <button class="bg-blue-600 text-white font-bold px-6 py-2 rounded-lg text-sm btn" onclick="handleTaskClick('website', 20, 50, 'https://bestearningapk2.blogspot.com')">Visit</button>
+            </div>
+
+            <div class="card-bg p-3 rounded-lg flex items-center justify-between">
+              <div class="flex items-center space-x-3">
+                <span class="text-3xl">⏱</span>
+                <div>
+                  <h3 class="font-semibold">Special Task Click</h3>
+                  <p class="text-xs text-gray-400">Wait 30 Seconds</p>
+                </div>
+              </div>
+              <button class="bg-white text-black font-bold px-6 py-2 rounded-lg text-sm btn" onclick="handleTaskClick('special', 30, 50, 'https://www.effectivegatecpm.com/mwgxympcy?key=76f87ec28dc349a0b520ca9e7b413c57')">Start</button>
+            </div>
+
+            <div class="card-bg p-3 rounded-lg flex items-center justify-between">
+              <div class="flex items-center space-x-3">
+                <span class="text-3xl">🎮</span>
+                <div>
+                  <h3 class="font-semibold">Play Mini Game</h3>
+                  <p class="text-xs text-gray-400">Big Reward!</p>
+                </div>
+              </div>
+              <button class="bg-green-600 text-white font-bold px-6 py-2 rounded-lg text-sm btn" onclick="handleTaskClick('game', 0, 100)">Play</button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Wallet Page -->
+      <div id="wallet-page" class="p-4 space-y-6 sub-page">
+        <h2 class="text-xl font-bold text-center">My Wallet</h2>
+        <div class="card-bg p-4 rounded-lg">
+          <p class="text-sm text-gray-400 mb-1">Available Balance:</p>
+          <p class="text-3xl font-bold text-accent mb-2"><span id="wallet-coin-balance">0</span> Coins</p>
+          <p class="text-sm text-gray-400 mb-4">= <span id="wallet-taka-equivalent">0.00</span> টাকা</p>
+          <input id="withdraw-amount" type="number" placeholder="Enter amount" class="w-full p-3 rounded-lg input-field mb-3">
+          <select id="withdraw-method" class="w-full p-3 rounded-lg input-field mb-3">
+            <option value="Bkash">Bkash</option>
+            <option value="Nagad">Nagad</option>
+            <option value="Rocket">Rocket</option>
+          </select>
+          <input id="payment-number" type="text" placeholder="Account Number" class="w-full p-3 rounded-lg input-field mb-3">
+          <button id="withdraw-btn" class="w-full p-3 rounded-lg btn-accent">Request Withdrawal</button>
+          <p class="text-xs text-gray-400 mt-4 text-center">Minimum: <span id="min-withdrawal-display">5000</span> Coins</p>
+        </div>
+        <div id="withdrawal-history-list" class="space-y-2"></div>
+      </div>
+
+      <!-- Refer Page -->
+      <div id="refer-page" class="p-4 space-y-6 sub-page">
+        <h2 class="text-xl font-bold text-center">Refer & Earn</h2>
+        <div class="card-bg p-6 rounded-lg text-center">
+          <p class="text-gray-400 mb-2">Your Code</p>
+          <div class="bg-gray-800 p-3 rounded-lg flex items-center justify-center mb-4 border border-accent border-dashed">
+            <span id="referral-code" class="text-2xl font-bold tracking-widest text-accent">...</span>
+            <button id="copy-code-btn" class="ml-4"><i data-lucide="copy" class="w-5 h-5 text-gray-400"></i></button>
+          </div>
+          <p class="text-sm text-gray-400 mb-2">Total Referrals: <span id="total-referrals">0</span></p>
+          <p class="text-sm text-gray-400 mb-4">Referral Earnings: <span id="referral-earnings">0</span> Coins</p>
+          <button id="share-btn" class="w-full p-3 rounded-lg btn-accent">Share With Friends</button>
+        </div>
+      </div>
+
+      <!-- Profile Page -->
+      <div id="profile-page" class="p-4 space-y-6 sub-page">
+        <div class="flex flex-col items-center">
+          <div class="w-20 h-20 bg-accent rounded-full flex items-center justify-center mb-4">
+            <i data-lucide="user" class="w-10 h-10 text-black"></i>
+          </div>
+          <h2 id="profile-name" class="text-xl font-bold">...</h2>
+          <p id="profile-email" class="text-gray-400">...</p>
+          <p id="profile-status" class="text-sm mt-2"></p>
+        </div>
+        
+        <div class="card-bg p-4 rounded-lg">
+          <p class="text-sm text-gray-400 mb-2">Account Statistics:</p>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between">
+              <span>Total Earned:</span>
+              <span id="total-earned" class="text-accent">0</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Total Withdrawn:</span>
+              <span id="total-withdrawn" class="text-accent">0</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Completed Tasks:</span>
+              <span id="completed-tasks" class="text-accent">0</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Incomplete Tasks:</span>
+              <span id="incomplete-tasks" class="text-red-500">0</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Member Since:</span>
+              <span id="member-since">-</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-bg p-4 rounded-lg">
+          <p class="text-sm text-gray-400 mb-2">Device/IP Info:</p>
+          <p id="current-device-info" class="text-xs font-mono p-2 bg-gray-800 rounded break-all"></p>
+        </div>
+
+        <button id="admin-login-btn" onclick="enableAdminMode()" class="w-full mt-4 p-3 rounded-lg bg-purple-600 text-white font-bold hidden">Admin Panel</button>
+        <button id="logout-btn" class="w-full mt-4 p-3 rounded-lg bg-red-600 text-white font-bold">Logout</button>
+      </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav sticky bottom-0 grid grid-cols-4 items-center text-center py-2 card-bg border-t border-gray-800">
+      <a href="#" class="nav-link active" data-page="home-page"><i data-lucide="home" class="mx-auto w-5 h-5"></i><span class="text-[10px]">Home</span></a>
+      <a href="#" class="nav-link" data-page="wallet-page"><i data-lucide="wallet" class="mx-auto w-5 h-5"></i><span class="text-[10px]">Wallet</span></a>
+      <a href="#" class="nav-link" data-page="refer-page"><i data-lucide="users" class="mx-auto w-5 h-5"></i><span class="text-[10px]">Refer</span></a>
+      <a href="#" class="nav-link" data-page="profile-page"><i data-lucide="user" class="mx-auto w-5 h-5"></i><span class="text-[10px]">Profile</span></a>
+    </nav>
+  </div>
+
+  <!-- Custom Alert -->
+  <div id="custom-alert" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[150] p-4">
+    <div class="bg-gray-800 rounded-lg p-6 w-full max-w-xs text-center border border-accent">
+      <p id="alert-message" class="mb-4 font-medium text-sm"></p>
+      <button id="alert-ok-btn" class="btn-accent px-8 py-2 rounded-lg text-sm">OK</button>
+    </div>
+  </div>
+
+  <!-- Custom Confirm -->
+  <div id="custom-confirm" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[150] p-4">
+    <div class="bg-gray-800 rounded-lg p-6 w-full max-w-xs text-center border border-accent">
+      <p id="confirm-message" class="mb-4 font-medium text-sm"></p>
+      <div class="flex space-x-3">
+        <button id="confirm-yes-btn" class="flex-1 btn-accent px-4 py-2 rounded-lg text-sm">হ্যাঁ</button>
+        <button id="confirm-no-btn" class="flex-1 bg-gray-600 px-4 py-2 rounded-lg text-sm">না</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Global Variables
+    let currentUser = null;
+    let userData = null;
+    let appSettings = {
+      minWithdrawal: 5000,
+      dailyAdLimit: 15,
+      referralBonus: 50,
+      coinRate: 0.01 // 1 coin = 0.01 taka
+    };
+    let userIP = null;
+    let deviceId = null;
+    let isAdmin = false;
+    let activeTimer = null;
+    
+    // নতুন ভেরিয়েবল যোগ করা হয়েছে
+    let currentTask = {
+      id: null,
+      type: null,
+      waitSeconds: 0,
+      coins: 0,
+      url: null,
+      startTime: null,
+      completed: false,
+      popupShown: false
+    };
+    let taskStartTime = null;
+    let taskWindow = null;
+    let taskCheckInterval = null;
+    let countdownInterval = null;
+
+    // Admin emails
+    const ADMIN_EMAILS = ['admin@example.com', 'your-email@gmail.com'];
+
+    // DOM Elements
+    const loader = document.getElementById('loader');
+    const taskPopup = document.getElementById('task-start-popup');
+    const warningPopup = document.getElementById('incomplete-task-popup');
+    const taskRecoveryPopup = document.getElementById('task-recovery-popup');
+    const timerModal = document.getElementById('timer-modal');
+    const countdownDisplay = document.getElementById('countdown-display');
+    const userBlockedMessage = document.getElementById('user-blocked-message');
+    const ipWarning = document.getElementById('ip-warning');
+
+    // Utility Functions
+    async function getIPAddress() {
+      try {
+        const response = await fetch('https://api.ipify.org?format=json');
+        const data = await response.json();
+        return data.ip;
+      } catch (e) {
+        return 'unknown';
+      }
+    }
+
+    function generateDeviceId() {
+      let id = localStorage.getItem('device_id');
+      if (!id) {
+        id = 'dev_' + Math.random().toString(36).substring(2, 15) + '_' + Date.now();
+        localStorage.setItem('device_id', id);
+      }
+      return id;
+    }
+
+    function showLoader(show) {
+      if (loader) loader.classList.toggle('hidden', !show);
+    }
+
+    function showAlert(message) {
+      const alertEl = document.getElementById('custom-alert');
+      const messageEl = document.getElementById('alert-message');
+      if (alertEl && messageEl) {
+        messageEl.textContent = message;
+        alertEl.classList.remove('hidden');
+        document.getElementById('alert-ok-btn').onclick = () => {
+          alertEl.classList.add('hidden');
+        };
+      }
+    }
+
+    function showConfirm(message, onYes) {
+      const confirmEl = document.getElementById('custom-confirm');
+      const messageEl = document.getElementById('confirm-message');
+      if (confirmEl && messageEl) {
+        messageEl.textContent = message;
+        confirmEl.classList.remove('hidden');
+        document.getElementById('confirm-yes-btn').onclick = () => {
+          confirmEl.classList.add('hidden');
+          if (onYes) onYes();
+        };
+        document.getElementById('confirm-no-btn').onclick = () => {
+          confirmEl.classList.add('hidden');
+        };
+      }
+    }
+
+    // Show 3-second task start popup
+    function showTaskStartPopup(seconds, coins) {
+      document.getElementById('popup-timer-display').textContent = seconds || 5;
+      document.getElementById('popup-coins').textContent = coins || 50;
+      
+      taskPopup.classList.add('show');
+      
+      setTimeout(() => {
+        taskPopup.classList.remove('show');
+      }, 3000);
+    }
+
+    // Show warning popup for incomplete task
+    function showIncompleteTaskPopup() {
+      warningPopup.classList.add('show');
+      
+      setTimeout(() => {
+        warningPopup.classList.remove('show');
+      }, 3000);
+    }
+
+    // নতুন ফাংশন - অসম্পূর্ণ টাস্ক রিকভারি
+    function showTaskRecoveryPopup() {
+      taskRecoveryPopup.classList.add('show');
+    }
+
+    // নতুন ফাংশন - টাস্ক রিকভারি
+    window.recoverIncompleteTask = function() {
+      taskRecoveryPopup.classList.remove('show');
+      const savedTask = sessionStorage.getItem('currentTask');
+      if (savedTask) {
+        try {
+          currentTask = JSON.parse(savedTask);
+          if (currentTask && !currentTask.completed) {
+            startActualTask();
+          }
+        } catch(e) {
+          console.error('Task recovery error:', e);
+        }
+      }
+    };
+
+    // নতুন ফাংশন - টাস্ক ডিসকার্ড
+    window.discardIncompleteTask = function() {
+      taskRecoveryPopup.classList.remove('show');
+      sessionStorage.removeItem('currentTask');
+      currentTask = { id: null, type: null, waitSeconds: 0, coins: 0, url: null, startTime: null, completed: false, popupShown: false };
+    };
+
+    // Handle Task Click (এনহ্যান্সড)
+    window.handleTaskClick = function(type, waitSeconds, coins, url) {
+      if (!currentUser || !userData) {
+        showAlert('দয়া করে লগইন করুন');
+        return;
+      }
+
+      if (userData.blocked) {
+        showAlert('আপনার অ্যাকাউন্ট ব্লক করা হয়েছে!');
+        return;
+      }
+
+      // Check daily limit
+      const today = new Date().toISOString().split('T')[0];
+      const dailyCount = userData.lastAdWatchDate === today ? (userData.dailyAdCount || 0) : 0;
+      
+      if (dailyCount >= appSettings.dailyAdLimit) {
+        showAlert('আজকের টাস্ক লিমিট শেষ হয়েছে! আগামীকাল আবার চেষ্টা করুন।');
+        return;
+      }
+
+      // Generate unique task ID
+      const taskId = Date.now() + '_' + Math.random().toString(36).substring(2, 9);
+      
+      // Store task info
+      currentTask = {
+        id: taskId,
+        type: type,
+        waitSeconds: waitSeconds || 5,
+        coins: coins || 50,
+        url: url,
+        startTime: Date.now(),
+        completed: false,
+        popupShown: false
+      };
+
+      // Save to session storage for recovery
+      sessionStorage.setItem('currentTask', JSON.stringify(currentTask));
+
+      // Show the 3-second preparation popup
+      showTaskStartPopup(currentTask.waitSeconds, currentTask.coins);
+      
+      // After 3 seconds, start the actual task
+      setTimeout(() => {
+        if (currentTask && !currentTask.completed) {
+          startActualTask();
+        }
+      }, 3000);
+    };
+
+    // Start Actual Task (এনহ্যান্সড)
+    function startActualTask() {
+      if (!currentTask || currentTask.completed) return;
+
+      currentTask.startTime = Date.now();
+      taskStartTime = currentTask.startTime;
+
+      // Log task start
+      logActivity(currentUser.uid, 'task_started', `${currentTask.type} task started`);
+
+      if (currentTask.type === 'video') {
+        // Video ad
+        startVideoAd();
+      } 
+      else if (currentTask.type === 'website' || currentTask.type === 'special') {
+        // Website visit
+        startWebsiteTask();
+      }
+      else if (currentTask.type === 'game') {
+        // Mini game
+        completeTask(currentTask.coins, currentTask.type);
+      }
+    }
+
+    // Video Ad Function (নতুন)
+    function startVideoAd() {
+      if (typeof window.show_10662537 === 'function') {
+        showLoader(true);
+        
+        // Create a promise to track ad completion
+        const adPromise = window.show_10662537();
+        
+        // Set timeout for ad loading
+        const timeoutId = setTimeout(() => {
+          showLoader(false);
+          if (!currentTask.completed) {
+            trackIncompleteTask();
+            showIncompleteTaskPopup();
+          }
+        }, 30000); // 30 second timeout
+        
+        adPromise.then((result) => {
+          clearTimeout(timeoutId);
+          showLoader(false);
+          
+          // Ad completed successfully
+          if (currentTask && !currentTask.completed) {
+            completeTask(currentTask.coins, currentTask.type);
+          }
+        }).catch((error) => {
+          clearTimeout(timeoutId);
+          showLoader(false);
+          console.error("Ad error:", error);
+          
+          if (!currentTask.completed) {
+            trackIncompleteTask();
+            showIncompleteTaskPopup();
+          }
+        });
+      } else {
+        showAlert("বিজ্ঞাপন তৈরি হচ্ছে, আবার চেষ্টা করুন।");
+        trackIncompleteTask();
+        showIncompleteTaskPopup();
+      }
+    }
+
+    // Website Task Function (এনহ্যান্সড)
+    function startWebsiteTask() {
+      // Open website in new window
+      taskWindow = window.open(currentTask.url, '_blank', 'width=800,height=600');
+      
+      if (!taskWindow) {
+        showAlert('পপ-আপ ব্লকার detected! অনুগ্রহ করে পপ-আপ ব্লকার অফ করে আবার চেষ্টা করুন।');
+        trackIncompleteTask();
+        return;
+      }
+      
+      // Show timer modal
+      timerModal.classList.remove('hidden');
+      let timeLeft = currentTask.waitSeconds;
+      countdownDisplay.textContent = timeLeft;
+      
+      // Clear any existing intervals
+      if (taskCheckInterval) clearInterval(taskCheckInterval);
+      if (countdownInterval) clearInterval(countdownInterval);
+      
+      // Start countdown
+      countdownInterval = setInterval(() => {
+        timeLeft--;
+        countdownDisplay.textContent = timeLeft;
+        
+        if (timeLeft <= 0) {
+          clearInterval(countdownInterval);
+          countdownInterval = null;
+          
+          // Task completed successfully
+          if (taskWindow && !taskWindow.closed && currentTask && !currentTask.completed) {
+            completeTask(currentTask.coins, currentTask.type);
+          }
+        }
+      }, 1000);
+      
+      // Monitor window status
+      taskCheckInterval = setInterval(() => {
+        if (!taskWindow || taskWindow.closed) {
+          // User closed the window
+          clearInterval(taskCheckInterval);
+          clearInterval(countdownInterval);
+          timerModal.classList.add('hidden');
+          
+          if (currentTask && !currentTask.completed) {
+            // Check if enough time passed
+            const timeElapsed = Math.floor((Date.now() - currentTask.startTime) / 1000);
+            
+            if (timeElapsed >= currentTask.waitSeconds) {
+              // User stayed long enough, complete task
+              completeTask(currentTask.coins, currentTask.type);
+            } else {
+              // User left early
+              trackIncompleteTask();
+              showIncompleteTaskPopup();
+            }
+          }
+          taskWindow = null;
+        }
+      }, 500);
+      
+      // Add focus monitoring to detect when user returns
+      window.addEventListener('focus', function onFocus() {
+        if (currentTask && !currentTask.completed && taskWindow && taskWindow.closed) {
+          window.removeEventListener('focus', onFocus);
+          
+          const timeElapsed = Math.floor((Date.now() - currentTask.startTime) / 1000);
+          
+          if (timeElapsed >= currentTask.waitSeconds) {
+            completeTask(currentTask.coins, currentTask.type);
+          } else {
+            trackIncompleteTask();
+            showIncompleteTaskPopup();
+          }
+          
+          timerModal.classList.add('hidden');
+          clearInterval(taskCheckInterval);
+          clearInterval(countdownInterval);
+        }
+      });
+    }
+
+    // Complete Task - Add Reward (এনহ্যান্সড)
+    async function completeTask(coins, type) {
+      if (!currentUser || !userData || !currentTask || currentTask.completed) return;
+      
+      // Mark as completed
+      currentTask.completed = true;
+      
+      // Clean up
+      if (taskWindow) {
+        try { taskWindow.close(); } catch(e) {}
+        taskWindow = null;
+      }
+      
+      if (taskCheckInterval) {
+        clearInterval(taskCheckInterval);
+        taskCheckInterval = null;
+      }
+      
+      if (countdownInterval) {
+        clearInterval(countdownInterval);
+        countdownInterval = null;
+      }
+      
+      timerModal.classList.add('hidden');
+      
+      // Clear session storage
+      sessionStorage.removeItem('currentTask');
+      
+      const today = new Date().toISOString().split('T')[0];
+      
+      try {
+        const { doc, updateDoc } = window.firebaseModules;
+        const userRef = doc(window.firebaseDb, "users", currentUser.uid);
+        
+        let newCount = (userData.lastAdWatchDate === today) ? (userData.dailyAdCount || 0) + 1 : 1;
+        const newBalance = (userData.balance || 0) + coins;
+        const newTotalEarned = (userData.totalEarned || 0) + coins;
+        const newCompletedTasks = (userData.completedTasks || 0) + 1;
+        
+        await updateDoc(userRef, {
+          balance: newBalance,
+          dailyAdCount: newCount,
+          lastAdWatchDate: today,
+          totalEarned: newTotalEarned,
+          completedTasks: newCompletedTasks,
+          lastTaskTime: new Date().toISOString()
+        });
+        
+        userData.balance = newBalance;
+        userData.dailyAdCount = newCount;
+        userData.lastAdWatchDate = today;
+        userData.totalEarned = newTotalEarned;
+        userData.completedTasks = newCompletedTasks;
+        
+        updateUI();
+        showAlert(`অভিনন্দন! আপনি ${coins} কয়েন পেয়েছেন।`);
+        
+        // Log activity
+        await logActivity(currentUser.uid, 'task_complete', `${coins} coins from ${type}`);
+        
+        // Reset current task
+        currentTask = { id: null, type: null, waitSeconds: 0, coins: 0, url: null, startTime: null, completed: false, popupShown: false };
+        
+      } catch (e) {
+        console.error("Error completing task:", e);
+        showAlert('টাস্ক কমপ্লিট করতে সমস্যা হয়েছে।');
+      }
+    }
+
+    // Track Incomplete Task (এনহ্যান্সড)
+    async function trackIncompleteTask() {
+      if (!currentUser || !userData) return;
+      
+      try {
+        const { doc, updateDoc } = window.firebaseModules;
+        const userRef = doc(window.firebaseDb, "users", currentUser.uid);
+        const newIncompleteTasks = (userData.incompleteTasks || 0) + 1;
+        
+        await updateDoc(userRef, {
+          incompleteTasks: newIncompleteTasks
+        });
+        
+        userData.incompleteTasks = newIncompleteTasks;
+        updateUI();
+        
+        // Log activity
+        await logActivity(currentUser.uid, 'task_incomplete', 'Task not completed');
+        
+        // Show warning popup
+        showIncompleteTaskPopup();
+        
+        // Reset current task
+        currentTask = { id: null, type: null, waitSeconds: 0, coins: 0, url: null, startTime: null, completed: false, popupShown: false };
+        sessionStorage.removeItem('currentTask');
+        
+      } catch (e) {
+        console.error("Error tracking incomplete task:", e);
+      }
+    }
+
+    // Log Activity
+    async function logActivity(userId, type, description) {
+      if (!window.firebaseDb) return;
+      try {
+        const { collection, addDoc } = window.firebaseModules;
+        await addDoc(collection(window.firebaseDb, "activities"), {
+          userId,
+          type,
+          description,
+          timestamp: new Date().toISOString()
+        });
+      } catch (e) {
+        console.error("Error logging activity:", e);
+      }
+    }
+
+    // Calculate Taka Equivalent
+    function calculateTaka(coins) {
+      return (coins * (appSettings.coinRate || 0.01)).toFixed(2);
+    }
+
+    // Update UI
+    function updateUI() {
+      if (!userData) return;
+
+      const balance = userData.balance || 0;
+      document.getElementById('coin-balance').textContent = balance;
+      document.getElementById('wallet-coin-balance').textContent = balance;
+      document.getElementById('taka-equivalent').textContent = calculateTaka(balance);
+      document.getElementById('wallet-taka-equivalent').textContent = calculateTaka(balance);
+      
+      document.getElementById('profile-name').textContent = userData.name || 'User';
+      document.getElementById('profile-email').textContent = userData.email || '';
+      document.getElementById('referral-code').textContent = userData.referralCode || 'XXXXXX';
+      document.getElementById('current-device-info').textContent = `ID: ${deviceId} | IP: ${userIP}`;
+      document.getElementById('total-referrals').textContent = userData.totalReferrals || 0;
+      document.getElementById('referral-earnings').textContent = userData.referralEarnings || 0;
+      document.getElementById('total-earned').textContent = userData.totalEarned || 0;
+      document.getElementById('total-withdrawn').textContent = userData.totalWithdrawn || 0;
+      document.getElementById('completed-tasks').textContent = userData.completedTasks || 0;
+      document.getElementById('incomplete-tasks').textContent = userData.incompleteTasks || 0;
+      
+      const today = new Date().toISOString().split('T')[0];
+      const count = userData.lastAdWatchDate === today ? (userData.dailyAdCount || 0) : 0;
+      document.getElementById('ads-left-count').textContent = appSettings.dailyAdLimit - count;
+      
+      document.getElementById('min-withdrawal-display').textContent = appSettings.minWithdrawal;
+
+      if (userData.createdAt) {
+        const date = new Date(userData.createdAt);
+        document.getElementById('member-since').textContent = date.toLocaleDateString('bn-BD');
+      }
+
+      if (userData.email && ADMIN_EMAILS.includes(userData.email)) {
+        document.getElementById('admin-login-btn').classList.remove('hidden');
+      } else {
+        document.getElementById('admin-login-btn').classList.add('hidden');
+      }
+
+      if (userData.blocked) {
+        userBlockedMessage.style.display = 'block';
+        document.getElementById('profile-status').innerHTML = '⛔ <span class="text-red-500">Account Blocked</span>';
+      } else {
+        userBlockedMessage.style.display = 'none';
+        document.getElementById('profile-status').innerHTML = '✅ <span class="text-green-500">Active</span>';
+      }
+    }
+
+    // Navigation
+    window.navigateTo = function(pageId) {
+      if (userData?.blocked && pageId !== 'profile-page') {
+        showAlert('আপনার অ্যাকাউন্ট ব্লক করা হয়েছে!');
+        return;
+      }
+      document.querySelectorAll(".sub-page").forEach(p => p.classList.remove("active"));
+      document.getElementById(pageId).classList.add("active");
+      document.querySelectorAll(".nav-link").forEach(link => {
+        link.classList.remove("active", "text-accent");
+        if (link.dataset.page === pageId) {
+          link.classList.add("active", "text-accent");
+        }
+      });
+    };
+
+    // Load Withdrawal History
+    async function loadWithdrawalHistory() {
+      if (!currentUser || !window.firebaseDb) return;
+
+      try {
+        const { collection, query, where, orderBy, getDocs } = window.firebaseModules;
+        const q = query(
+          collection(window.firebaseDb, "withdrawals"),
+          where("userId", "==", currentUser.uid),
+          orderBy("timestamp", "desc"),
+          limit(20)
+        );
+
+        const querySnapshot = await getDocs(q);
+        const historyList = document.getElementById('withdrawal-history-list');
+        historyList.innerHTML = '';
+
+        if (querySnapshot.empty) {
+          historyList.innerHTML = '<p class="text-center text-gray-400 text-sm">কোন উইথড্রোয়াল ইতিহাস নেই</p>';
+          return;
+        }
+
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          const date = data.timestamp ? new Date(data.timestamp).toLocaleDateString('bn-BD') : 'অজানা';
+          const statusColor = data.status === 'approved' ? 'text-green-500' : data.status === 'rejected' ? 'text-red-500' : 'text-yellow-500';
+          const statusBangla = data.status === 'approved' ? 'অনুমোদিত' : data.status === 'rejected' ? 'বাতিল' : 'অপেক্ষমাণ';
+          
+          const div = document.createElement('div');
+          div.className = 'card-bg p-3 rounded-lg text-sm withdrawal-item';
+          div.innerHTML = `
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="font-semibold">${data.amount} Coins</p>
+                <p class="text-xs text-gray-400">${data.method}: ${data.number}</p>
+                <p class="text-xs text-gray-400">${date}</p>
+              </div>
+              <span class="${statusColor} font-semibold">${statusBangla}</span>
+            </div>
+          `;
+          historyList.appendChild(div);
+        });
+      } catch (e) {
+        console.error("Error loading withdrawal history:", e);
+      }
+    }
+
+    // Request Withdrawal
+    async function requestWithdrawal() {
+      if (!currentUser || !userData || !window.firebaseDb) return;
+
+      if (userData.blocked) {
+        showAlert('ব্লক করা অ্যাকাউন্ট থেকে উইথড্র করা যাবে না!');
+        return;
+      }
+
+      const amount = parseInt(document.getElementById('withdraw-amount').value);
+      const method = document.getElementById('withdraw-method').value;
+      const number = document.getElementById('payment-number').value;
+
+      if (!amount || !number) {
+        showAlert('সব তথ্য দিন');
+        return;
+      }
+
+      if (amount < appSettings.minWithdrawal) {
+        showAlert(`সর্বনিম্ন উইথড্রোয়াল ${appSettings.minWithdrawal} কয়েন`);
+        return;
+      }
+
+      if (amount > userData.balance) {
+        showAlert('আপনার পর্যাপ্ত ব্যালান্স নেই');
+        return;
+      }
+
+      showConfirm(`${amount} কয়েন উইথড্রোয়াল করতে চান?`, async () => {
+        try {
+          showLoader(true);
+
+          const { collection, addDoc, doc, updateDoc } = window.firebaseModules;
+
+          await addDoc(collection(window.firebaseDb, "withdrawals"), {
+            userId: currentUser.uid,
+            userName: userData.name,
+            userEmail: userData.email,
+            amount: amount,
+            method: method,
+            number: number,
+            status: 'pending',
+            timestamp: new Date().toISOString()
+          });
+
+          const userRef = doc(window.firebaseDb, "users", currentUser.uid);
+          await updateDoc(userRef, {
+            balance: userData.balance - amount
+          });
+
+          userData.balance -= amount;
+
+          updateUI();
+          loadWithdrawalHistory();
+          showAlert('উইথড্রোয়াল রিকোয়েস্ট সফল হয়েছে।');
+          
+          document.getElementById('withdraw-amount').value = '';
+          document.getElementById('payment-number').value = '';
+        } catch (error) {
+          console.error("Withdrawal error:", error);
+          showAlert('উইথড্রোয়াল রিকোয়েস্ট ব্যর্থ হয়েছে।');
+        } finally {
+          showLoader(false);
+        }
+      });
+    }
+
+    // Load App Settings
+    async function loadAppSettings() {
+      if (!window.firebaseDb) return;
+      try {
+        const { doc, getDoc } = window.firebaseModules;
+        const settingsRef = doc(window.firebaseDb, "settings", "app");
+        const settingsSnap = await getDoc(settingsRef);
+        
+        if (settingsSnap.exists()) {
+          appSettings = { ...appSettings, ...settingsSnap.data() };
+        }
+        
+        updateUI();
+      } catch (e) {
+        console.error("Error loading settings:", e);
+      }
+    }
+
+    // Toggle Admin Panel
+    window.toggleAdminPanel = function() {
+      const panel = document.getElementById('admin-panel');
+      panel.classList.toggle('hidden');
+      if (!panel.classList.contains('hidden')) {
+        loadAdminData();
+      }
+    };
+
+    window.enableAdminMode = function() {
+      if (userData && ADMIN_EMAILS.includes(userData.email)) {
+        toggleAdminPanel();
+      } else {
+        showAlert('আপনার অ্যাডমিন অ্যাক্সেস নেই!');
+      }
+    };
+
+    window.switchAdminTab = function(tab) {
+      document.getElementById('admin-users-tab').classList.add('hidden');
+      document.getElementById('admin-withdrawals-tab').classList.add('hidden');
+      document.getElementById('admin-settings-tab').classList.add('hidden');
+      document.getElementById('admin-stats-tab').classList.add('hidden');
+      
+      document.getElementById('tab-users').classList.remove('admin-tab-active');
+      document.getElementById('tab-withdrawals').classList.remove('admin-tab-active');
+      document.getElementById('tab-settings').classList.remove('admin-tab-active');
+      document.getElementById('tab-stats').classList.remove('admin-tab-active');
+      
+      document.getElementById(`admin-${tab}-tab`).classList.remove('hidden');
+      document.getElementById(`tab-${tab}`).classList.add('admin-tab-active');
+      
+      if (tab === 'users') loadAllUsers();
+      if (tab === 'withdrawals') loadWithdrawalRequests('pending');
+      if (tab === 'stats') loadAdminStats();
+      if (tab === 'settings') loadSettingsForAdmin();
+    };
+
+    window.loadAllUsers = async function() {
+      if (!window.firebaseDb) return;
+      try {
+        showLoader(true);
+        const { collection, getDocs, query, orderBy } = window.firebaseModules;
+        const usersRef = collection(window.firebaseDb, "users");
+        const q = query(usersRef, orderBy("createdAt", "desc"));
+        const querySnapshot = await getDocs(q);
+        
+        displayUsers(querySnapshot.docs);
+      } catch (e) {
+        console.error("Error loading users:", e);
+      } finally {
+        showLoader(false);
+      }
+    };
+
+    window.loadBlockedUsers = async function() {
+      if (!window.firebaseDb) return;
+      try {
+        showLoader(true);
+        const { collection, getDocs, query, where } = window.firebaseModules;
+        const usersRef = collection(window.firebaseDb, "users");
+        const q = query(usersRef, where("blocked", "==", true));
+        const querySnapshot = await getDocs(q);
+        
+        displayUsers(querySnapshot.docs);
+      } catch (e) {
+        console.error("Error loading blocked users:", e);
+      } finally {
+        showLoader(false);
+      }
+    };
+
+    window.searchUsers = async function() {
+      const searchTerm = document.getElementById('search-user').value.toLowerCase();
+      if (!searchTerm) {
+        loadAllUsers();
+        return;
+      }
+      
+      if (!window.firebaseDb) return;
+      try {
+        showLoader(true);
+        const { collection, getDocs } = window.firebaseModules;
+        const usersRef = collection(window.firebaseDb, "users");
+        const querySnapshot = await getDocs(usersRef);
+        
+        const filteredDocs = querySnapshot.docs.filter(doc => {
+          const data = doc.data();
+          return (data.email && data.email.toLowerCase().includes(searchTerm)) ||
+                 (data.name && data.name.toLowerCase().includes(searchTerm));
+        });
+        
+        displayUsers(filteredDocs);
+      } catch (e) {
+        console.error("Error searching users:", e);
+      } finally {
+        showLoader(false);
+      }
+    };
+
+    function displayUsers(docs) {
+      const usersList = document.getElementById('users-list');
+      usersList.innerHTML = '';
+      
+      if (docs.length === 0) {
+        usersList.innerHTML = '<p class="text-center text-gray-400">কোন ইউজার পাওয়া যায়নি</p>';
+        return;
+      }
+      
+      docs.forEach(doc => {
+        const data = doc.data();
+        const div = document.createElement('div');
+        div.className = 'bg-gray-800 p-3 rounded-lg';
+        div.innerHTML = `
+          <div class="flex justify-between items-start">
+            <div class="flex-1">
+              <p class="font-semibold">${data.name || 'নাম নেই'}</p>
+              <p class="text-xs text-gray-400">${data.email || 'ইমেইল নেই'}</p>
+              <p class="text-xs text-gray-400">Balance: ${data.balance || 0} Coins</p>
+              <p class="text-xs text-gray-400">IP: ${data.ip || 'N/A'}</p>
+              <p class="text-xs ${data.blocked ? 'text-red-500' : 'text-green-500'}">${data.blocked ? '🔴 Blocked' : '🟢 Active'}</p>
+            </div>
+            <div class="flex flex-col space-y-2">
+              ${data.blocked ? 
+                `<button onclick="unblockUser('${doc.id}')" class="bg-green-600 text-white px-3 py-1 rounded text-xs">Unblock</button>` : 
+                `<button onclick="blockUser('${doc.id}')" class="bg-red-600 text-white px-3 py-1 rounded text-xs">Block</button>`
+              }
+              <button onclick="addUserBalance('${doc.id}', ${data.balance || 0})" class="bg-blue-600 text-white px-3 py-1 rounded text-xs">Add Coins</button>
+            </div>
+          </div>
+        `;
+        usersList.appendChild(div);
+      });
+    }
+
+    window.blockUser = async function(userId) {
+      showConfirm('এই ইউজারকে ব্লক করতে চান?', async () => {
+        if (!window.firebaseDb) return;
+        try {
+          showLoader(true);
+          const { doc, updateDoc } = window.firebaseModules;
+          await updateDoc(doc(window.firebaseDb, "users", userId), {
+            blocked: true,
+            blockedAt: new Date().toISOString()
+          });
+          showAlert('ইউজার ব্লক করা হয়েছে');
+          loadAllUsers();
+        } catch (e) {
+          console.error("Error blocking user:", e);
+        } finally {
+          showLoader(false);
+        }
+      });
+    };
+
+    window.unblockUser = async function(userId) {
+      showConfirm('এই ইউজারকে আনব্লক করতে চান?', async () => {
+        if (!window.firebaseDb) return;
+        try {
+          showLoader(true);
+          const { doc, updateDoc } = window.firebaseModules;
+          await updateDoc(doc(window.firebaseDb, "users", userId), {
+            blocked: false
+          });
+          showAlert('ইউজার আনব্লক করা হয়েছে');
+          loadAllUsers();
+        } catch (e) {
+          console.error("Error unblocking user:", e);
+        } finally {
+          showLoader(false);
+        }
+      });
+    };
+
+    window.addUserBalance = async function(userId, currentBalance) {
+      const amount = prompt('কত কয়েন যোগ করতে চান?', '100');
+      if (!amount || isNaN(amount) || parseInt(amount) <= 0) return;
+      
+      showConfirm(`${amount} কয়েন যোগ করতে চান?`, async () => {
+        if (!window.firebaseDb) return;
+        try {
+          showLoader(true);
+          const { doc, updateDoc } = window.firebaseModules;
+          await updateDoc(doc(window.firebaseDb, "users", userId), {
+            balance: currentBalance + parseInt(amount)
+          });
+          showAlert(`${amount} কয়েন যোগ করা হয়েছে`);
+          loadAllUsers();
+        } catch (e) {
+          console.error("Error adding balance:", e);
+        } finally {
+          showLoader(false);
+        }
+      });
+    };
+
+    window.loadWithdrawalRequests = async function(status = 'pending') {
+      if (!window.firebaseDb) return;
+      try {
+        showLoader(true);
+        const { collection, getDocs, query, where, orderBy } = window.firebaseModules;
+        const withdrawalsRef = collection(window.firebaseDb, "withdrawals");
+        let q;
+        
+        if (status === 'all') {
+          q = query(withdrawalsRef, orderBy("timestamp", "desc"));
+        } else {
+          q = query(withdrawalsRef, where("status", "==", status), orderBy("timestamp", "desc"));
+        }
+        
+        const querySnapshot = await getDocs(q);
+        displayWithdrawals(querySnapshot.docs);
+      } catch (e) {
+        console.error("Error loading withdrawals:", e);
+      } finally {
+        showLoader(false);
+      }
+    };
+
+    window.filterWithdrawals = function(status) {
+      window.loadWithdrawalRequests(status);
+    };
+
+    function displayWithdrawals(docs) {
+      const list = document.getElementById('withdrawal-requests-list');
+      list.innerHTML = '';
+      
+      if (docs.length === 0) {
+        list.innerHTML = '<p class="text-center text-gray-400">কোন উইথড্রোয়াল রিকোয়েস্ট নেই</p>';
+        return;
+      }
+      
+      docs.forEach(doc => {
+        const data = doc.data();
+        const date = data.timestamp ? new Date(data.timestamp).toLocaleString('bn-BD') : 'অজানা';
+        
+        const div = document.createElement('div');
+        div.className = 'bg-gray-800 p-3 rounded-lg';
+        div.innerHTML = `
+          <div class="flex justify-between items-start">
+            <div class="flex-1">
+              <p class="font-semibold">${data.userName || 'নাম নেই'}</p>
+              <p class="text-xs text-gray-400">${data.userEmail || 'ইমেইল নেই'}</p>
+              <p class="text-sm font-bold text-accent">${data.amount} Coins</p>
+              <p class="text-xs text-gray-400">${data.method}: ${data.number}</p>
+              <p class="text-xs text-gray-400">${date}</p>
+              <p class="text-xs ${data.status === 'pending' ? 'text-yellow-500' : data.status === 'approved' ? 'text-green-500' : 'text-red-500'}">${data.status}</p>
+            </div>
+            ${data.status === 'pending' ? `
+              <div class="flex flex-col space-y-2">
+                <button onclick="approveWithdrawal('${doc.id}', ${data.amount}, '${data.userId}')" class="bg-green-600 text-white px-3 py-1 rounded text-xs">Approve</button>
+                <button onclick="rejectWithdrawal('${doc.id}')" class="bg-red-600 text-white px-3 py-1 rounded text-xs">Reject</button>
+              </div>
+            ` : ''}
+          </div>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    window.approveWithdrawal = async function(withdrawalId, amount, userId) {
+      showConfirm('এই উইথড্রোয়াল অনুমোদন করতে চান?', async () => {
+        if (!window.firebaseDb) return;
+        try {
+          showLoader(true);
+          const { doc, updateDoc, getDoc } = window.firebaseModules;
+          
+          await updateDoc(doc(window.firebaseDb, "withdrawals", withdrawalId), {
+            status: 'approved',
+            approvedAt: new Date().toISOString()
+          });
+          
+          const userRef = doc(window.firebaseDb, "users", userId);
+          const userSnap = await getDoc(userRef);
+          if (userSnap.exists()) {
+            const userData = userSnap.data();
+            await updateDoc(userRef, {
+              totalWithdrawn: (userData.totalWithdrawn || 0) + amount
+            });
+          }
+          
+          showAlert('উইথড্রোয়াল অনুমোদন করা হয়েছে');
+          loadWithdrawalRequests('pending');
+          loadAdminStats();
+        } catch (e) {
+          console.error("Error approving withdrawal:", e);
+        } finally {
+          showLoader(false);
+        }
+      });
+    };
+
+    window.rejectWithdrawal = async function(withdrawalId) {
+      showConfirm('এই উইথড্রোয়াল বাতিল করতে চান?', async () => {
+        if (!window.firebaseDb) return;
+        try {
+          showLoader(true);
+          const { doc, updateDoc } = window.firebaseModules;
+          
+          await updateDoc(doc(window.firebaseDb, "withdrawals", withdrawalId), {
+            status: 'rejected',
+            rejectedAt: new Date().toISOString()
+          });
+          
+          showAlert('উইথড্রোয়াল বাতিল করা হয়েছে');
+          loadWithdrawalRequests('pending');
+        } catch (e) {
+          console.error("Error rejecting withdrawal:", e);
+        } finally {
+          showLoader(false);
+        }
+      });
+    };
+
+    function loadSettingsForAdmin() {
+      document.getElementById('min-withdrawal-setting').value = appSettings.minWithdrawal;
+      document.getElementById('daily-ad-limit-setting').value = appSettings.dailyAdLimit;
+      document.getElementById('referral-bonus-setting').value = appSettings.referralBonus || 50;
+      document.getElementById('coin-rate-setting').value = appSettings.coinRate || 0.01;
+    }
+
+    window.updateSettings = async function() {
+      const newSettings = {
+        minWithdrawal: parseInt(document.getElementById('min-withdrawal-setting').value),
+        dailyAdLimit: parseInt(document.getElementById('daily-ad-limit-setting').value),
+        referralBonus: parseInt(document.getElementById('referral-bonus-setting').value),
+        coinRate: parseFloat(document.getElementById('coin-rate-setting').value),
+        updatedAt: new Date().toISOString()
+      };
+      
+      showConfirm('সেটিংস আপডেট করতে চান?', async () => {
+        if (!window.firebaseDb) return;
+        try {
+          showLoader(true);
+          const { doc, setDoc } = window.firebaseModules;
+          await setDoc(doc(window.firebaseDb, "settings", "app"), newSettings);
+          
+          appSettings = { ...appSettings, ...newSettings };
+          updateUI();
+          showAlert('সেটিংস আপডেট করা হয়েছে');
+        } catch (e) {
+          console.error("Error updating settings:", e);
+        } finally {
+          showLoader(false);
+        }
+      });
+    };
+
+    window.loadAdminStats = async function() {
+      if (!window.firebaseDb) return;
+      try {
+        const { collection, getDocs, query, where } = window.firebaseModules;
+        
+        const usersSnap = await getDocs(collection(window.firebaseDb, "users"));
+        document.getElementById('total-users').textContent = usersSnap.size;
+        
+        const withdrawalsSnap = await getDocs(collection(window.firebaseDb, "withdrawals"));
+        document.getElementById('total-withdrawals').textContent = withdrawalsSnap.size;
+        
+        const pendingQuery = query(collection(window.firebaseDb, "withdrawals"), where("status", "==", "pending"));
+        const pendingSnap = await getDocs(pendingQuery);
+        document.getElementById('pending-withdrawals').textContent = pendingSnap.size;
+        
+        let totalPaid = 0;
+        withdrawalsSnap.forEach(doc => {
+          if (doc.data().status === 'approved') {
+            totalPaid += doc.data().amount || 0;
+          }
+        });
+        document.getElementById('total-coins-paid').textContent = totalPaid;
+      } catch (e) {
+        console.error("Error loading stats:", e);
+      }
+    };
+
+    function loadAdminData() {
+      loadAllUsers();
+      loadWithdrawalRequests('pending');
+      loadSettingsForAdmin();
+      loadAdminStats();
+    }
+
+    // Auth Functions
+    async function handleSignUp() {
+      const name = document.getElementById('signup-name').value;
+      const email = document.getElementById('signup-email').value;
+      const password = document.getElementById('signup-password').value;
+      const referralCode = document.getElementById('referral-code-input').value;
+
+      if (!name || !email || !password) {
+        showAlert("সব ফিল্ড পূরণ করুন");
+        return;
+      }
+
+      if (password.length < 6) {
+        showAlert("পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে");
+        return;
+      }
+
+      try {
+        showLoader(true);
+        
+        const { createUserWithEmailAndPassword, updateProfile } = window.firebaseModules;
+        const userCredential = await createUserWithEmailAndPassword(window.firebaseAuth, email, password);
+        const user = userCredential.user;
+        
+        await updateProfile(user, { displayName: name });
+
+        const newReferralCode = Math.random().toString(36).substring(2, 8).toUpperCase() + Date.now().toString(36).substring(4, 8).toUpperCase();
+        
+        const { doc, setDoc } = window.firebaseModules;
+        const userRef = doc(window.firebaseDb, "users", user.uid);
+        
+        const userDataObj = {
+          uid: user.uid,
+          name: name,
+          email: email,
+          balance: 50,
+          referralCode: newReferralCode,
+          referredBy: referralCode || null,
+          dailyAdCount: 0,
+          lastAdWatchDate: new Date().toISOString().split('T')[0],
+          deviceId: deviceId,
+          ip: userIP,
+          createdAt: new Date().toISOString(),
+          totalEarned: 50,
+          totalWithdrawn: 0,
+          totalReferrals: 0,
+          referralEarnings: 0,
+          completedTasks: 0,
+          incompleteTasks: 0,
+          blocked: false
+        };
+
+        await setDoc(userRef, userDataObj);
+
+        showAlert("সাইন আপ সফল হয়েছে! আপনি ৫০ বোনাস কয়েন পেয়েছেন।");
+      } catch (error) {
+        console.error("Signup error:", error);
+        showAlert(error.message || "সাইন আপ ব্যর্থ হয়েছে");
+      } finally {
+        showLoader(false);
+      }
+    }
+
+    async function handleLogin() {
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+
+      if (!email || !password) {
+        showAlert("ইমেইল ও পাসওয়ার্ড দিন");
+        return;
+      }
+
+      try {
+        showLoader(true);
+        const { signInWithEmailAndPassword } = window.firebaseModules;
+        await signInWithEmailAndPassword(window.firebaseAuth, email, password);
+      } catch (error) {
+        console.error("Login error:", error);
+        showAlert(error.message || "লগইন ব্যর্থ হয়েছে");
+      } finally {
+        showLoader(false);
+      }
+    }
+
+    async function handleLogout() {
+      try {
+        showLoader(true);
+        const { signOut } = window.firebaseModules;
+        await signOut(window.firebaseAuth);
+      } catch (error) {
+        console.error("Logout error:", error);
+        showAlert("লগআউট ব্যর্থ হয়েছে");
+      } finally {
+        showLoader(false);
+      }
+    }
+
+    async function handleForgotPassword() {
+      const email = document.getElementById('login-email').value;
+      if (!email) {
+        showAlert("ইমেইল এড্রেস দিন");
+        return;
+      }
+      
+      try {
+        const { sendPasswordResetEmail } = window.firebaseModules;
+        await sendPasswordResetEmail(window.firebaseAuth, email);
+        showAlert("পাসওয়ার্ড রিসেট ইমেইল পাঠানো হয়েছে");
+      } catch (error) {
+        console.error("Forgot password error:", error);
+        showAlert(error.message || "পাসওয়ার্ড রিসেট ব্যর্থ হয়েছে");
+      }
+    }
+
+    async function handleAuthStateChange(user) {
+      if (user) {
+        currentUser = user;
+        showLoader(true);
+        
+        try {
+          const { doc, getDoc } = window.firebaseModules;
+          const userRef = doc(window.firebaseDb, "users", user.uid);
+          const userSnap = await getDoc(userRef);
+          
+          if (userSnap.exists()) {
+            userData = userSnap.data();
+          } else {
+            const referralCode = Math.random().toString(36).substring(2, 8).toUpperCase() + Date.now().toString(36).substring(4, 8).toUpperCase();
+            userData = {
+              uid: user.uid,
+              name: user.displayName || "User",
+              email: user.email,
+              balance: 50,
+              referralCode: referralCode,
+              dailyAdCount: 0,
+              lastAdWatchDate: new Date().toISOString().split('T')[0],
+              deviceId: deviceId,
+              ip: userIP,
+              createdAt: new Date().toISOString(),
+              totalEarned: 50,
+              totalWithdrawn: 0,
+              completedTasks: 0,
+              incompleteTasks: 0,
+              blocked: false
+            };
+            await setDoc(userRef, userData);
+          }
+
+          await loadAppSettings();
+          await loadWithdrawalHistory();
+          
+          updateUI();
+          document.getElementById('auth-section').classList.remove('active');
+          document.getElementById('app-container').classList.add('active');
+
+          // চেক ফর ইনকমপ্লিট টাস্ক
+          const savedTask = sessionStorage.getItem('currentTask');
+          if (savedTask) {
+            try {
+              const task = JSON.parse(savedTask);
+              if (task && !task.completed && (Date.now() - task.startTime) < 60000) { // 1 মিনিটের মধ্যে
+                showTaskRecoveryPopup();
+              } else {
+                sessionStorage.removeItem('currentTask');
+              }
+            } catch(e) {}
+          }
+        } catch (e) {
+          console.error("Error loading user data:", e);
+          showAlert("ডাটা লোড করতে সমস্যা হয়েছে");
+        } finally {
+          showLoader(false);
+        }
+      } else {
+        currentUser = null;
+        userData = null;
+        document.getElementById('app-container').classList.remove('active');
+        document.getElementById('auth-section').classList.add('active');
+      }
+    }
+
+    // নতুন ইভেন্ট লিসেনার - পেজ ভিজিবিলিটি চেঞ্জ (একবারই থাকবে)
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        // Page hidden, store task state
+        if (currentTask && !currentTask.completed && currentTask.id) {
+          sessionStorage.setItem('currentTask', JSON.stringify(currentTask));
+        }
+      } else {
+        // Page visible again, check for incomplete task
+        const savedTask = sessionStorage.getItem('currentTask');
+        if (savedTask && currentUser) {
+          try {
+            const task = JSON.parse(savedTask);
+            if (task && !task.completed && task.id === currentTask?.id) {
+              const timeElapsed = Math.floor((Date.now() - task.startTime) / 1000);
+              
+              if (timeElapsed >= task.waitSeconds) {
+                // Enough time passed, complete task
+                completeTask(task.coins, task.type);
+              } else if (timeElapsed > 0) {
+                // Not enough time, mark incomplete
+                trackIncompleteTask();
+              }
+            }
+          } catch(e) {}
+        }
+      }
+    });
+
+    // beforeunload ইভেন্ট লিসেনার - কোনো পপআপ ছাড়া শুধু সেশন স্টোরেজে সেভ করবে
+    window.addEventListener('beforeunload', (e) => {
+      if (currentTask && !currentTask.completed && currentTask.id) {
+        sessionStorage.setItem('currentTask', JSON.stringify(currentTask));
+      }
+      // return statement নেই - তাই কোনো পপআপ আসবে না
+    });
+
+    // Initialize - শুধু একবার
+    window.onload = async () => {
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+
+      userIP = await getIPAddress();
+      deviceId = generateDeviceId();
+
+      document.getElementById('signup-btn').onclick = handleSignUp;
+      document.getElementById('login-btn').onclick = handleLogin;
+      document.getElementById('logout-btn').onclick = handleLogout;
+      document.getElementById('forgot-password').onclick = (e) => {
+        e.preventDefault();
+        handleForgotPassword();
+      };
+      
+      document.getElementById('withdraw-btn').onclick = requestWithdrawal;
+      document.getElementById('copy-code-btn').onclick = () => {
+        const code = document.getElementById('referral-code').textContent;
+        navigator.clipboard.writeText(code);
+        showAlert("রেফারেল কোড কপি হয়েছে!");
+      };
+      
+      document.getElementById('share-btn').onclick = () => {
+        if (navigator.share && userData) {
+          navigator.share({
+            title: 'Best Earning App',
+            text: `Join Best Earning App and earn coins! Use my referral code: ${userData.referralCode}`,
+            url: window.location.href
+          }).catch(() => {
+            showAlert(`Share this code: ${userData.referralCode}`);
+          });
+        } else if (userData) {
+          showAlert(`Use this referral code: ${userData.referralCode}`);
+        }
+      };
+
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.onclick = (e) => {
+          e.preventDefault();
+          navigateTo(link.dataset.page);
+        };
+      });
+
+      document.getElementById('show-signup').onclick = (e) => {
+        e.preventDefault();
+        document.getElementById('login-view').classList.add('hidden');
+        document.getElementById('signup-view').classList.remove('hidden');
+      };
+      
+      document.getElementById('show-login').onclick = (e) => {
+        e.preventDefault();
+        document.getElementById('signup-view').classList.add('hidden');
+        document.getElementById('login-view').classList.remove('hidden');
+      };
+
+      if (window.firebaseAuth) {
+        const { onAuthStateChanged } = window.firebaseModules;
+        onAuthStateChanged(window.firebaseAuth, handleAuthStateChange);
+      }
+    };
+  </script>
+</body>
+</html>
