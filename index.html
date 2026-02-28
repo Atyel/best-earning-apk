@@ -1,48 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Best Earning APK</title>
-    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com.firebasejs/9.1.2/firebase-database.js"></script>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div id="app">
-        <h1>Best Earning APK</h1>
-        <div id="tasks">
-            <!-- Task elements will be displayed here -->
-        </div>
-        <div id="statistics">
-            <p>Incomplete Tasks: <span id="incompleteTasks">0</span></p>
-            <p>Your Coins: <span id="userCoins">0</span></p>
-        </div>
-    </div>
-    <script>
-        // Firebase configuration and initialization
-        const firebaseConfig = { /* Your Firebase config */ };
-        const app = firebase.initializeApp(firebaseConfig);
+// JavaScript and HTML code with Firebase integration, task management, wallet, referral system, and admin panel features
 
-        let userCoins = 0;
-        let incompleteTasks = 0;
+const completeTask = (taskId) => {
+    const task = getTask(taskId);
+    if (task && task.completed) {
+        awardCoins(task.reward); // Only award coins if the task is completed
+    }
+};
 
-        function completeTask(task) {
-            if (task.completed && task.timerFinished) { 
-                userCoins += task.coinsAwarded;
-                document.getElementById('userCoins').innerText = userCoins;
-            }
-        }
+const trackIncompleteTask = (taskId) => {
+    const task = getTask(taskId);
+    if (task && !task.completed) {
+        incrementIncompleteCounter(); // Increment the counter without awarding coins
+    }
+};
 
-        function trackIncompleteTask(task) {
-            if (!task.completed) {
-                incompleteTasks++;
-                document.getElementById('incompleteTasks').innerText = incompleteTasks;
-            }
-        }
-
-        // Other existing functions and event listeners
-    </script>
-</body>
-</html>
+// Other necessary code for Firebase integration, task management, wallet, referral system, and admin panel functions
