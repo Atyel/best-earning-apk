@@ -3,24 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Completion</title>
+    <title>Best Earning APK</title>
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com.firebasejs/9.1.2/firebase-database.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Task Completion Logic</h1>
+    <div id="app">
+        <h1>Best Earning APK</h1>
+        <div id="tasks">
+            <!-- Task elements will be displayed here -->
+        </div>
+        <div id="statistics">
+            <p>Incomplete Tasks: <span id="incompleteTasks">0</span></p>
+            <p>Your Coins: <span id="userCoins">0</span></p>
+        </div>
+    </div>
     <script>
+        // Firebase configuration and initialization
+        const firebaseConfig = { /* Your Firebase config */ };
+        const app = firebase.initializeApp(firebaseConfig);
+
+        let userCoins = 0;
+        let incompleteTasks = 0;
+
         function completeTask(task) {
-            if (task.isComplete) {
-                awardCoins(task);
-            } else {
-                console.log('No coins awarded for incomplete tasks.');
+            if (task.completed && task.timerFinished) { 
+                userCoins += task.coinsAwarded;
+                document.getElementById('userCoins').innerText = userCoins;
             }
         }
 
-        function awardCoins(task) {
-            const coins = task.coins || 0;
-            console.log(`Awarding ${coins} coins for task: ${task.name}`);
-            // Logic to add coins to user's account goes here
+        function trackIncompleteTask(task) {
+            if (!task.completed) {
+                incompleteTasks++;
+                document.getElementById('incompleteTasks').innerText = incompleteTasks;
+            }
         }
+
+        // Other existing functions and event listeners
     </script>
 </body>
 </html>
